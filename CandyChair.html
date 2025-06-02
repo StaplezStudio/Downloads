@@ -1,1 +1,70 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nft Info</title>
+</head>
+<body>
+
+    <h1>Staplez Studios Nft "Candy Chair"</h1>
+    <h3>Download & Licensing</h3><br>
+
+    <button onclick="downloadArweaveFile()">GLB File</button>
+    <button onclick="location.href='https://staplezstudio.github.io/CommercialLicense/'">GLB License Information</button>
+
+    <script>
+        async function downloadArweaveFile() {
+            const arweaveUrl = "FILE NAME";
+
+            // Prompt the user for the desired filename
+            const userFilename = prompt("Enter the desired filename (e.g., mycube.glb):", "cube1.glb"); // Default filename
+
+            // If the user clicks Cancel or enters an empty string, stop the process
+            if (userFilename === null || userFilename.trim() === "") {
+                console.log("Download cancelled by user.");
+                return; // Exit the function
+            }
+
+            const suggestedFilename = userFilename; // Use the user-provided filename
+
+            try {
+                // Fetch the file from Arweave.
+                const response = await fetch(arweaveUrl);
+
+                // Check if the fetch was successful
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+                }
+
+                // Get the file content as a Blob
+                const blob = await response.blob();
+
+                // Create a temporary URL for the Blob
+                const blobUrl = URL.createObjectURL(blob);
+
+                // Create a temporary anchor element
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = suggestedFilename; // Use the user-provided (or default) filename
+
+                // Append the anchor to the body
+                document.body.appendChild(a);
+
+                // Programmatically click the anchor to trigger the download
+                a.click();
+
+                // Clean up
+                document.body.removeChild(a);
+                URL.revokeObjectURL(blobUrl);
+
+            } catch (error) {
+                console.error("Error downloading file:", error);
+                alert("Failed to download the file. This might be due to server restrictions or network issues. Check the console for more details.");
+            }
+        }
+    </script>
+
+</body>
+</html>
